@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>Unsaved Changes</h1>
+<div mat-dialog-content>
+  <p>There are unsaved changes. Executing a search without saving changes will result in losing your changes. Click the
+    Cancel button to cancel the search and then click the save button to save your changes. Click the OK button to
+    execute the search and lose your changes.</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()" cdkFocusInitial>Cancel</button>
+  <button mat-button [mat-dialog-close]="true">OK</button>
+</div>

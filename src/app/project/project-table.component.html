@@ -1,0 +1,140 @@
+<div class='card'>
+  <div class='card-header'>
+    {{pageTitle}}
+  </div>
+  <div class='card-body'>
+
+    <div class='card '>
+      <div class='card-header'>
+        Project Filter
+      </div>
+      <div class='card-body'>
+        <div class="container">
+          <div class='row'>
+            <div class="col">
+              <input type='text' [(ngModel)]='titleFilter' placeholder="Title" />
+            </div>
+            <div class="col">
+              <input type='text' [(ngModel)]='divisionFilter' placeholder="Division" />
+            </div>
+            <div class="col">
+              <input type='text' [(ngModel)]='projectOwnerFilter' placeholder="Project Owner" />
+            </div>
+
+            <div class="col">
+              <input type='number' [(ngModel)]='budgetFilter' placeholder="Budget" />
+            </div>
+            <div class="col">
+              <input type='text' [(ngModel)]='statusFilter' placeholder="Status" />
+            </div>
+          </div>
+        </div>
+        <div class="container">
+          <div class='row'>
+            <div class="col-3">
+              <input matInput [matDatepicker]="picker" [(ngModel)]='createdStartDateFilter'
+                placeholder="Created start date" />
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+
+              <!-- <input type='date' [(ngModel)]='createdStartDateFilter' placeholder="Created start date" /> -->
+
+            </div>
+            <div class="col-3">
+              <input matInput [matDatepicker]="picker2" [(ngModel)]='createdEndDateFilter'
+                placeholder="Created start date" />
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </div>
+          </div>
+          <div class='row'>
+            <div class="col-3">
+              <input matInput [matDatepicker]="picker3" [(ngModel)]='modifiedStartDateFilter'
+                placeholder="Modified start date" />
+              <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+              <mat-datepicker #picker3></mat-datepicker>
+            </div>
+            <div class="col-3">
+              <input matInput [matDatepicker]="picker4" [(ngModel)]='modifiedEndDateFilter'
+                placeholder="Modified end date" />
+              <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+              <mat-datepicker #picker4></mat-datepicker>
+            </div>
+          </div>
+        </div>
+        <div class='row'>
+          <button (click)="clearSearch()" class="btn btn-primary button-horizontal-space">Clear Search</button>
+          <button (click)="search()" class="btn btn-primary">Search</button>
+        </div>
+      </div>
+    </div>
+
+    <div class='row button-vertical-space pull-right'>
+      <button id="exportProjectButton" [disabled]="!projectsForm.valid" class="btn btn-primary button-horizontal-space"
+        [routerLink]="">Export</button>
+      <button id="addProjectButton" [disabled]="!projectsForm.valid" class="btn btn-primary button-horizontal-space"
+        [routerLink]="">Add Project</button>
+      <button (click)="save()" [disabled]="!projectsForm.valid" class="btn btn-primary">Save</button>
+    </div>
+
+    <div class='row button-vertical-space'>
+      <span>Budget Total: {{budgetTotal | currency}}</span>
+    </div>
+
+    <div class='table-responsive'>
+      <form [formGroup]="projectsForm">
+        <table class="table">
+          <thead>
+            <th>Title</th>
+            <th>Division</th>
+            <th>Project Owner</th>
+            <th>Budget</th>
+            <th>Status</th>
+            <th>Created</th>
+            <th>Modified</th>
+          </thead>
+          <tbody formArrayName="projects" *ngFor="let group of getFormData.controls; let i=index">
+            <tr [formGroupName]="i">
+              <td class="form-group">
+                <a [routerLink]="">
+                  {{group.get('title').value}}
+                </a>
+              </td>
+              <td class="form-group">
+                {{group.get('division').value}}
+              </td>
+              <td class="form-group">
+                <input type="text" class="form-control" formControlName="project_owner" placeholder="Project Owner">
+                <span class="text-danger"
+                  *ngIf="group.get('project_owner').touched && group.get('project_owner').invalid">Project Owner is
+                  required</span>
+              </td>
+              <td class="form-group">
+                <input type="number" class="form-control" formControlName="budget" placeholder="Budget">
+                <span class="text-danger" *ngIf="group.get('budget').touched && group.get('budget').invalid">
+                  {{ getErrorBudget(group) }}
+                </span>
+              </td>
+              <td class="form-group">
+                <input type="text" class="form-control" formControlName="status" placeholder="Status">
+                <span class="text-danger" *ngIf="group.get('status').touched && group.get('status').invalid">Status is
+                  required</span>
+              </td>
+              <td>
+                {{group.get('created').value | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                {{group.get('modified').value | date: 'MM/dd/yyyy'}}
+              </td>
+              <td>
+                <button (click)="remove(i)" class="btn btn-primary mr-5">Remove</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </form>
+    </div>
+  </div>
+  <div class="alert alert-danger" *ngIf="errorMessage">{{errorMessage}}
+  </div>
+</div>
